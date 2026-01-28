@@ -101,15 +101,15 @@ export function DietForm({ onSubmit }: DietFormProps) {
         const subscription = form.watch((value, { name }) => {
             // Atualiza todos os campos, não só o que mudou
             const newCompletedFields = new Set<string>();
-            
+
             Object.keys(value).forEach((fieldName) => {
                 const fieldValue = value[fieldName as keyof DietSchemaFormData];
-                
+
                 try {
                     // Valida o campo individualmente
                     const fieldSchema = dietSchema.shape[fieldName as keyof typeof dietSchema.shape];
                     fieldSchema.parse(fieldValue);
-                    
+
                     // Se passou na validação, marca como completo
                     if (fieldValue !== undefined && fieldValue !== "") {
                         newCompletedFields.add(fieldName);
@@ -118,7 +118,7 @@ export function DietForm({ onSubmit }: DietFormProps) {
                     // Se deu erro na validação, não marca como completo
                 }
             });
-            
+
             setCompletedFields(newCompletedFields);
         });
 
@@ -168,40 +168,44 @@ export function DietForm({ onSubmit }: DietFormProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+                        className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-center justify-center p-4"
                     >
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl"
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-white rounded-[32px] p-8 sm:p-10 max-w-md w-full shadow-[0_32px_64px_-12px_rgba(0,0,0,0.2)] border border-gray-100 relative overflow-hidden"
                         >
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center">
-                                    <Save className="w-6 h-6 text-emerald-600" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-black text-gray-900">Rascunho Encontrado!</h3>
-                                    <p className="text-sm text-gray-500">Você tem dados salvos anteriormente</p>
-                                </div>
-                            </div>
-                            
-                            <p className="text-sm text-gray-600 mb-6">
-                                Encontramos um formulário que você começou a preencher. Deseja continuar de onde parou?
-                            </p>
+                            {/* Detalhe decorativo sutil no fundo */}
+                            <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-50 rounded-full blur-3xl opacity-50" />
 
-                            <div className="flex gap-3">
+                            <div className="flex flex-col items-center text-center mb-8">
+                                <div className="w-20 h-20 bg-emerald-50 rounded-[24px] flex items-center justify-center mb-6 shadow-inner">
+                                    <Save className="w-10 h-10 text-emerald-600" />
+                                </div>
+                                <h3 className="text-2xl font-black text-gray-900 mb-2 tracking-tight">Rascunho Encontrado!</h3>
+                                <p className="text-gray-500 leading-relaxed">
+                                    Notamos que você já começou a preencher seu perfil. Deseja retomar de onde parou?
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col gap-4">
                                 <Button
                                     onClick={recoverDraft}
-                                    className="flex-1 h-12 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold"
+                                    className="group relative h-14 bg-[#111827] hover:bg-black text-white rounded-2xl font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
                                 >
-                                    <RotateCcw className="w-4 h-4 mr-2" />
-                                    Continuar
+                                    <div className="relative z-10 flex items-center justify-center gap-2">
+                                        <RotateCcw className="w-5 h-5 group-hover:rotate-[-45deg] transition-transform duration-300" />
+                                        Continuar Progresso
+                                    </div>
+                                    {/* Efeito de brilho no hover */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite]" />
                                 </Button>
+
                                 <Button
                                     onClick={discardDraft}
-                                    variant="outline"
-                                    className="flex-1 h-12 border-gray-200 hover:bg-gray-50 rounded-xl font-bold"
+                                    variant="ghost"
+                                    className="h-12 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-2xl font-bold transition-all duration-200"
                                 >
                                     Começar do Zero
                                 </Button>
@@ -210,6 +214,16 @@ export function DietForm({ onSubmit }: DietFormProps) {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Adicione este CSS global ou no seu arquivo de estilos para o efeito de brilho */}
+            <style jsx global>{`
+  @keyframes shine {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+`}</style>
+
 
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
@@ -388,7 +402,14 @@ export function DietForm({ onSubmit }: DietFormProps) {
                                                             <FormControl>
                                                                 <Input
                                                                     type="number"
-                                                                    {...form.register("idade", { setValueAs: (v) => v === "" ? undefined : Number(v) })}
+                                                                    onChange={(e) => {
+                                                                        const val = e.target.value;
+                                                                        field.onChange(val === "" ? undefined : Number(val));
+                                                                    }}
+                                                                    name={field.name}
+                                                                    onBlur={field.onBlur}
+                                                                    ref={field.ref}
+                                                                    {...(field.value !== undefined && { value: field.value })}
                                                                     placeholder="Ex: 28"
                                                                     className={cn(
                                                                         "bg-gray-50 border-gray-100 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-11 sm:h-12 rounded-xl sm:rounded-2xl transition-all text-sm sm:text-base",
@@ -417,7 +438,7 @@ export function DietForm({ onSubmit }: DietFormProps) {
                                                                     </motion.div>
                                                                 )}
                                                             </FormLabel>
-                                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                            <Select onValueChange={field.onChange} value={field.value}>
                                                                 <FormControl>
                                                                     <SelectTrigger className={cn(
                                                                         "bg-gray-50 border-gray-100 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-11 sm:h-12 rounded-xl sm:rounded-2xl transition-all text-sm sm:text-base",
@@ -463,7 +484,14 @@ export function DietForm({ onSubmit }: DietFormProps) {
                                                                 <Input
                                                                     type="number"
                                                                     step="0.1"
-                                                                    {...form.register("peso_kg", { setValueAs: (v) => v === "" ? undefined : parseFloat(v) })}
+                                                                    onChange={(e) => {
+                                                                        const val = e.target.value;
+                                                                        field.onChange(val === "" ? undefined : parseFloat(val));
+                                                                    }}
+                                                                    name={field.name}
+                                                                    onBlur={field.onBlur}
+                                                                    ref={field.ref}
+                                                                    {...(field.value !== undefined && { value: field.value })}
                                                                     placeholder="00.0"
                                                                     className={cn(
                                                                         "bg-gray-50 border-gray-100 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-11 sm:h-12 rounded-xl sm:rounded-2xl transition-all pr-12 text-sm sm:text-base",
@@ -499,7 +527,14 @@ export function DietForm({ onSubmit }: DietFormProps) {
                                                             <div className="relative group">
                                                                 <Input
                                                                     type="number"
-                                                                    {...form.register("altura_cm", { setValueAs: (v) => v === "" ? undefined : parseFloat(v) })}
+                                                                    onChange={(e) => {
+                                                                        const val = e.target.value;
+                                                                        field.onChange(val === "" ? undefined : parseFloat(val));
+                                                                    }}
+                                                                    name={field.name}
+                                                                    onBlur={field.onBlur}
+                                                                    ref={field.ref}
+                                                                    {...(field.value !== undefined && { value: field.value })}
                                                                     placeholder="Ex: 175"
                                                                     className={cn(
                                                                         "bg-gray-50 border-gray-100 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-11 sm:h-12 rounded-xl sm:rounded-2xl transition-all pr-12 text-sm sm:text-base",
@@ -547,7 +582,7 @@ export function DietForm({ onSubmit }: DietFormProps) {
                                                                 </motion.div>
                                                             )}
                                                         </FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <Select onValueChange={field.onChange} value={field.value}>
                                                             <FormControl>
                                                                 <SelectTrigger className={cn(
                                                                     "bg-gray-50 border-gray-100 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-11 sm:h-12 rounded-xl sm:rounded-2xl transition-all text-sm sm:text-base",
@@ -606,7 +641,7 @@ export function DietForm({ onSubmit }: DietFormProps) {
                                                                 </motion.div>
                                                             )}
                                                         </FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <Select onValueChange={field.onChange} value={field.value}>
                                                             <FormControl>
                                                                 <SelectTrigger className={cn(
                                                                     "bg-gray-50 border-gray-100 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 h-11 sm:h-12 rounded-xl sm:rounded-2xl transition-all text-sm sm:text-base",

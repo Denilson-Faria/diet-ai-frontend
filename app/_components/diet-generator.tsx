@@ -351,10 +351,11 @@ export function DietGenerator({ data }: { data: DietData }) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            deletePlan(plan.id)
-                          }}
+                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    deletePlan(plan.id);
+}}
+
                           className="rounded-lg hover:bg-red-50 hover:text-red-600 flex-shrink-0"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -546,6 +547,30 @@ export function DietGenerator({ data }: { data: DietData }) {
                               marginTop: '1.5rem',
                               marginBottom: '0.75rem',
                               fontSize: 'clamp(1rem, 3vw, 1.25rem)'
+                            }} 
+                            {...props} 
+                          />
+                        ),
+                        h4: ({ ...props }) => (
+                          <h4 
+                            style={{ 
+                              color: '#1f2937',
+                              fontWeight: 700,
+                              marginTop: '1.25rem',
+                              marginBottom: '0.5rem',
+                              fontSize: 'clamp(0.95rem, 2.5vw, 1.125rem)'
+                            }} 
+                            {...props} 
+                          />
+                        ),
+                        p: ({ ...props }) => (
+                          <p 
+                            style={{ 
+                              color: '#374151',
+                              lineHeight: '1.75',
+                              marginBottom: '1rem',
+                              fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+                              fontWeight: 400
                             }} 
                             {...props} 
                           />
