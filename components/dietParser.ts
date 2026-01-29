@@ -25,50 +25,39 @@ export interface Refeicao {
 export function parseDietMarkdown(markdown: string): ParsedDietData {
   const dias: DiaDieta[] = [];
 
-  // Regex para detectar dias (Segunda, Terça, etc. ou Dia 1, Dia 2, etc.)
-  const diaRegex = new RegExp(
-  "##\\s*(Segunda|Terça|Quarta|Quinta|Sexta|Sábado|Domingo|Dia\\s*\\d+)[:\\-]?\\s*(.*?)(?=##\\s*(?:Segunda|Terça|Quarta|Quinta|Sexta|Sábado|Domingo|Dia\\s*\\d+)|$)",
-  "gis"
-);
+  // Dividir por "Dia X" (com ou sem ## ou **Dia**)
+  const diaRegex = /(?:^|\n)(?:##\s*)?(?:\*\*)?Dia\s*(\d+)(?:\*\*)?[:\s]*/gi;
+  const parts = markdown.split(diaRegex);
 
+  // parts[0] = conteúdo antes do primeiro dia
+  // parts[1] = número do dia 1, parts[2] = conteúdo do dia 1
+  // parts[3] = número do dia 2, parts[4] = conteúdo do dia 2, etc.
 
-  const nomeDias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-  
-  let diaMatch;
-  let diaNumero = 1;
+  for (let i = 1; i < parts.length; i += 2) {
+    const diaNumero = parseInt(parts[i]);
+    const diaConteudo = parts[i + 1] || '';
 
-  while ((diaMatch = diaRegex.exec(markdown)) !== null) {
-    const diaTexto = diaMatch[0];
-    const nomeDia = diaMatch[1].trim();
-    
-    // Normalizar nome do dia
-    let nomeFormatado = nomeDia;
-    if (nomeDia.toLowerCase().includes('dia')) {
-      const num = parseInt(nomeDia.match(/\d+/)?.[0] || '1');
-      nomeFormatado = nomeDias[num % 7] || `Dia ${num}`;
-    }
+    if (!diaConteudo.trim()) continue;
 
-    // Extrair refeições
-    const refeicoes = extractRefeicoes(diaTexto);
+    const refeicoes = extractRefeicoes(diaConteudo);
+    const macros = extractMacros(diaConteudo);
+    const dicas = extractDicas(diaConteudo);
 
-    // Extrair macros (se disponível)
-    const macros = extractMacros(diaTexto);
-
-    // Extrair dicas
-    const dicas = extractDicas(diaTexto);
+    const nomeDias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    const nomeDia = nomeDias[diaNumero % 7] || `Dia ${diaNumero}`;
 
     dias.push({
-      numero: diaNumero++,
-      nome: nomeFormatado,
+      numero: diaNumero,
+      nome: nomeDia,
       refeicoes,
       macros,
       dicas: dicas.length > 0 ? dicas : undefined,
     });
   }
 
-  // Se não encontrou nenhum dia com ## (formato variado), tenta outro formato
+  // Se não encontrou dias com "Dia X", tenta formato alternativo
   if (dias.length === 0) {
-    return parseDietFallback(markdown);
+    return parseDietAlternative(markdown);
   }
 
   return { dias };
@@ -77,36 +66,31 @@ export function parseDietMarkdown(markdown: string): ParsedDietData {
 function extractRefeicoes(diaTexto: string): Refeicao[] {
   const refeicoes: Refeicao[] = [];
 
-  // Regex para capturar refeições (### Café da Manhã, **Café da Manhã**, etc.)
-const refeicaoRegex: RegExp =
-  /(?:###\s*|\*\*)((?:Café da Manhã|Café da manhã|Lanche da Manhã|Lanche da manhã|Almoço|Lanche da Tarde|Lanche da tarde|Jantar|Ceia|Pré-treino|Pós-treino|Desjejum)(?:\s*\(.*?\))?)\*?\*?[:\-]?\s*([\s\S]*?)(?=(?:###|\*\*|##|$))/gi;
+  // Regex para capturar refeições com ✓ ou checkmark
+  // Exemplos: "✓ Café da Manhã:", "✓ Almoço:", "✓ Jantar:", "✓ Lanche:"
+  const refeicaoRegex = /[✓✔☑]\s*([^:]+):\s*([^\n✓✔☑]+(?:\n(?![✓✔☑])[^\n]+)*)/gi;
 
-  let refeicaoMatch;
+  let match;
+  while ((match = refeicaoRegex.exec(diaTexto)) !== null) {
+    const nomeCompleto = match[1].trim();
+    const conteudo = match[2].trim();
 
-  while ((refeicaoMatch = refeicaoRegex.exec(diaTexto)) !== null) {
-    const nomeRefeicao = refeicaoMatch[1].trim();
-    const conteudo = refeicaoMatch[2];
-
-    // Extrair horário (se disponível)
-    const horarioMatch = nomeRefeicao.match(/\((\d{1,2}:\d{2}|\d{1,2}h\d{2}?)\)/);
+    // Extrair horário do nome (ex: "Café da Manhã (7h)" ou "Almoço (12h)")
+    const horarioMatch = nomeCompleto.match(/\((\d{1,2}h\d{0,2}|\d{1,2}:\d{2})\)/);
     const horario = horarioMatch ? horarioMatch[1] : '';
+    const nomeLimpo = nomeCompleto.replace(/\(.*?\)/g, '').trim();
 
-    // Limpar nome da refeição
-    const nomeLimpo = nomeRefeicao.replace(/\(.*?\)/g, '').trim();
-
-    // Extrair alimentos (linhas com - ou *)
+    // O conteúdo é o texto direto (sem bullets)
+    // Exemplo: "Omelete de 3 ovos com espinafre e tomate, 1 fatia de pão integral."
     const alimentos: string[] = [];
-    const linhas = conteudo.split('\n');
     
-    for (const linha of linhas) {
-      const trimmed = linha.trim();
-      if (trimmed.startsWith('-') || trimmed.startsWith('*') || trimmed.startsWith('•')) {
-        const alimento = trimmed.replace(/^[\-\*•]\s*/, '').trim();
-        if (alimento && !alimento.toLowerCase().includes('total:')) {
-          alimentos.push(alimento);
-        }
-      }
-    }
+    // Dividir por vírgula ou ponto e vírgula, ou quebras de linha
+    const itens = conteudo
+      .split(/[,;]|\n/)
+      .map(item => item.trim())
+      .filter(item => item.length > 0);
+
+    alimentos.push(...itens);
 
     if (alimentos.length > 0) {
       refeicoes.push({
@@ -151,15 +135,15 @@ function extractDicas(diaTexto: string): string[] {
   const dicas: string[] = [];
 
   // Procurar por seções de dicas
-  const dicasMatch = diaTexto.match(/(?:dicas?|observaç[õo]es?)[:\s]*((?:[\-\*•].*\n?)+)/gi);
+  const dicasMatch = diaTexto.match(/(?:dicas?|observaç[õo]es?)[:\s]*((?:[\-\*•✓].*\n?)+)/gi);
 
   if (dicasMatch) {
     for (const match of dicasMatch) {
       const linhas = match.split('\n');
       for (const linha of linhas) {
         const trimmed = linha.trim();
-        if (trimmed.startsWith('-') || trimmed.startsWith('*') || trimmed.startsWith('•')) {
-          const dica = trimmed.replace(/^[\-\*•]\s*/, '').trim();
+        if (trimmed.match(/^[\-\*•✓]/)) {
+          const dica = trimmed.replace(/^[\-\*•✓]\s*/, '').trim();
           if (dica) {
             dicas.push(dica);
           }
@@ -171,38 +155,45 @@ function extractDicas(diaTexto: string): string[] {
   return dicas;
 }
 
-// Fallback: parser mais simples caso o formato seja diferente
-function parseDietFallback(markdown: string): ParsedDietData {
+// Parser alternativo para formatos diferentes
+function parseDietAlternative(markdown: string): ParsedDietData {
   const dias: DiaDieta[] = [];
-  
-  // Dividir por dias de forma mais genérica
-  const secoes = markdown.split(/(?=Dia\s*\d+|Segunda|Terça|Quarta|Quinta|Sexta|Sábado|Domingo)/gi);
 
-  const nomeDias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+  // Tentar detectar dias por dia da semana
+  const nomeDias = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+  const diaRegex = new RegExp(
+    `(?:^|\\n)(?:##\\s*)?(?:\\*\\*)?(${nomeDias.join('|')})[\\-\\s]*(?:feira)?(?:\\*\\*)?[:\\s]*`,
+    'gi'
+  );
 
-  secoes.forEach((secao, index) => {
-    if (secao.trim().length < 50) return; // Ignora seções muito pequenas
+  const parts = markdown.split(diaRegex);
 
-    const refeicoes = extractRefeicoes(secao);
-    if (refeicoes.length === 0) return;
+  for (let i = 1; i < parts.length; i += 2) {
+    const nomeDia = parts[i].trim();
+    const diaConteudo = parts[i + 1] || '';
+
+    if (!diaConteudo.trim()) continue;
+
+    const refeicoes = extractRefeicoes(diaConteudo);
+    if (refeicoes.length === 0) continue;
 
     dias.push({
-      numero: index + 1,
-      nome: nomeDias[index % 7] || `Dia ${index + 1}`,
+      numero: Math.floor(i / 2) + 1,
+      nome: nomeDia,
       refeicoes,
-      macros: extractMacros(secao),
-      dicas: extractDicas(secao),
+      macros: extractMacros(diaConteudo),
+      dicas: extractDicas(diaConteudo),
     });
-  });
+  }
 
   return { dias };
 }
 
 // Função auxiliar para calcular macros estimados se não estiverem no texto
 export function estimateMacros(refeicoes: Refeicao[]): DiaDieta['macros'] {
-  // Estimativa muito simplificada baseada no número de alimentos
+  // Estimativa baseada no número de alimentos
   const totalAlimentos = refeicoes.reduce((acc, r) => acc + r.alimentos.length, 0);
-  
+
   return {
     calorias: Math.round(totalAlimentos * 250), // ~250 kcal por alimento
     proteinas: Math.round(totalAlimentos * 20), // ~20g por alimento
