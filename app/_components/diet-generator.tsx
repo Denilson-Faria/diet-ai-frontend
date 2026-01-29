@@ -3,9 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DietData } from "../types/diet-data.type";
+import { useReactToPrint } from 'react-to-print';
 import { motion, AnimatePresence } from "framer-motion";
-import { pdf } from '@react-pdf/renderer';
-import { saveAs } from 'file-saver';
 import {
   Loader2,
   Sparkles,
@@ -20,14 +19,10 @@ import {
   ShieldCheck,
   History,
   Trash2,
-  X,
-  FileText,
+  X
 } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import { parseDietMarkdown, estimateMacros } from "../../components/dietParser";
-import { DietPDF } from "../../components/DietPDF";
-
 
 
 interface SavedPlan {
@@ -95,6 +90,8 @@ export function DietGenerator({ data }: { data: DietData }) {
     setOutput("")
     setIsStreaming(true);
 
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://diet-ai-backend-fi4y.onrender.com";
+
     try {
       const response = await fetch("https://diet-ai-backend-fi4y.onrender.com/plan", {
         method: "POST",
@@ -156,44 +153,16 @@ export function DietGenerator({ data }: { data: DietData }) {
     await startStreaming();
   }
 
-  // Exportar como PDF profissional
-  const handleExportPDF = async () => {
-    try {
+  const handlePrint = useReactToPrint({
+    contentRef: contentRef,
+    documentTitle: `Dieta_${data.nome.replace(/\s+/g, '_')}_Premium`,
+    onBeforePrint: async () => {
       setIsExporting(true);
-
-      // Parse do markdown para dados estruturados
-      const parsed = parseDietMarkdown(output);
-
-      // Adicionar macros estimados se não existirem
-      parsed.dias.forEach(dia => {
-  if (!dia.macros && dia.refeicoes) {
-    dia.macros = estimateMacros(dia.refeicoes);
-  }
-});
-
-
-      // Gerar PDF
-      const blob = await pdf(
-        <DietPDF
-          nome={data.nome}
-          idade={data.idade}
-          objetivo={data.objetivo}
-          nivelAtividade={data.nivel_atividade}
-          peso={data.peso_kg}
-          altura={data.altura_cm}
-          dias={parsed.dias}
-        />
-      ).toBlob();
-
-      // Download
-      saveAs(blob, `Dieta_${data.nome.replace(/\s+/g, '_')}_Premium.pdf`);
-    } catch (error) {
-      console.error('Erro ao gerar PDF:', error);
-      alert('Erro ao gerar PDF. Por favor, tente novamente.');
-    } finally {
+    },
+    onAfterPrint: async () => {
       setIsExporting(false);
-    }
-  };
+    },
+  });
 
   const handleShare = async () => {
     const shareData = {
@@ -217,11 +186,13 @@ export function DietGenerator({ data }: { data: DietData }) {
   
   const LoadingSkeleton = () => (
     <div className="p-6 md:p-10 space-y-6 animate-pulse">
+      {/* Título skeleton */}
       <div className="space-y-3">
         <div className="h-8 bg-gray-200 rounded-lg w-3/4"></div>
         <div className="h-4 bg-gray-100 rounded w-1/2"></div>
       </div>
 
+      {/* Seções skeleton */}
       {[1, 2, 3].map((i) => (
         <div key={i} className="space-y-3">
           <div className="flex items-center gap-3">
@@ -258,7 +229,7 @@ export function DietGenerator({ data }: { data: DietData }) {
 
       <div className="w-full max-w-5xl relative space-y-4 md:space-y-8">
         
-        {/* Card do Perfil */}
+        {/* Card do Perfil - Melhorado para Mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -379,7 +350,7 @@ export function DietGenerator({ data }: { data: DietData }) {
           )}
         </AnimatePresence>
 
-        {/* Card Principal */}
+        {/* Card Principal - Melhorado para Mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -415,6 +386,7 @@ export function DietGenerator({ data }: { data: DietData }) {
                   Seu plano está pronto
                 </h3>
                 
+                {/* Botões de ação */}
                 <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
                   <Button
                     onClick={handleGenerate}
@@ -467,7 +439,7 @@ export function DietGenerator({ data }: { data: DietData }) {
               </motion.div>
             )}
 
-            {/* Conteúdo Gerado */}
+            {/* Conteúdo Gerado - Aparece quando já tem output OU está streaming com output */}
             {output && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -475,7 +447,7 @@ export function DietGenerator({ data }: { data: DietData }) {
                 transition={{ duration: 0.5 }}
                 className="flex flex-col h-full"
               >
-                {/* Header com botões */}
+                {/* Header com botões - Mobile Otimizado */}
                 <div className="p-4 md:p-6 lg:p-8 border-b border-gray-100 bg-[#f9fafb] flex flex-col gap-4">
                   <div className="flex items-center gap-3 md:gap-4">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-[#111827] rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
@@ -494,11 +466,11 @@ export function DietGenerator({ data }: { data: DietData }) {
                   <div className="flex items-center gap-2 md:gap-3 flex-wrap">
                     <Button 
                       variant="outline" 
-                      onClick={handleExportPDF}
+                      onClick={() => handlePrint()}
                       disabled={isExporting}
                       className="flex-1 sm:flex-none rounded-xl border-gray-200 hover:border-[#10b981] hover:text-[#059669] transition-all gap-2 h-10 md:h-11 px-4 md:px-5"
                     >
-                      {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
+                      {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                       <span className="text-xs font-bold uppercase tracking-wider">
                         {isExporting ? 'Gerando...' : 'PDF'}
                       </span>
@@ -514,7 +486,7 @@ export function DietGenerator({ data }: { data: DietData }) {
                   </div>
                 </div>
 
-                {/* Área de conteúdo */}
+                {/* Área de conteúdo - Mobile Otimizada */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
