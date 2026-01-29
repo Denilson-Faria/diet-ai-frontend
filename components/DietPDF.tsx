@@ -9,9 +9,7 @@ import {
   Path,
   Circle,
   Rect,
-  Font,
 } from '@react-pdf/renderer';
-
 
 const styles = StyleSheet.create({
   // === PÁGINA ===
@@ -79,127 +77,157 @@ const styles = StyleSheet.create({
     fontWeight: 700,
   },
 
-  // === HEADER ===
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-    paddingBottom: 16,
-    borderBottom: '3px solid #10b981',
+  // === HEADER DO DIA ===
+  diaHeader: {
+    backgroundColor: '#111827',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 16,
+    marginTop: 20,
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  miniLogo: {
-    width: 40,
-    height: 40,
-  },
-  headerTitle: {
-    fontSize: 20,
+  diaTitulo: {
+    fontSize: 24,
     fontWeight: 900,
-    color: '#111827',
+    color: '#FFFFFF',
+    marginBottom: 4,
   },
-  headerDay: {
-    fontSize: 10,
-    color: '#10b981',
+  diaNumero: {
+    fontSize: 12,
+    color: '#34d399',
     textTransform: 'uppercase',
     fontWeight: 700,
     letterSpacing: 1,
   },
 
-  // === SEÇÕES ===
-  section: {
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: 900,
-    color: '#111827',
-    marginBottom: 8,
-    paddingLeft: 12,
-    borderLeft: '4px solid #10b981',
-  },
-  
-  // === REFEIÇÕES ===
-  mealGrid: {
+  // === MACROS ===
+  macroContainer: {
     flexDirection: 'row',
+    gap: 10,
+    marginBottom: 20,
     flexWrap: 'wrap',
-    gap: 8,
   },
-  mealCard: {
+  macroBox: {
+    flex: 1,
+    minWidth: 100,
     backgroundColor: '#F9FAFB',
-    border: '1px solid #E5E7EB',
+    border: '2px solid #10b981',
     borderRadius: 8,
     padding: 10,
-    width: '48%',
-    marginBottom: 6,
-  },
-  mealTime: {
-    fontSize: 9,
-    fontWeight: 700,
-    color: '#10b981',
-    textTransform: 'uppercase',
-    marginBottom: 4,
-    letterSpacing: 0.5,
-  },
-  mealItem: {
-    fontSize: 8,
-    color: '#374151',
-    marginBottom: 2,
-    lineHeight: 1.4,
-  },
-
-  // === MACROS ===
-  macroRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 8,
-  },
-  macroCard: {
-    flex: 1,
-    backgroundColor: '#111827',
-    borderRadius: 8,
-    padding: 8,
     alignItems: 'center',
   },
   macroLabel: {
-    fontSize: 7,
-    color: '#9CA3AF',
+    fontSize: 8,
+    color: '#6B7280',
     textTransform: 'uppercase',
-    marginBottom: 2,
+    marginBottom: 4,
+    fontWeight: 700,
     letterSpacing: 0.5,
   },
   macroValue: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 900,
-    color: '#34d399',
+    color: '#111827',
   },
   macroUnit: {
-    fontSize: 7,
-    color: '#34d399',
+    fontSize: 8,
+    color: '#6B7280',
+  },
+
+  // === REFEIÇÕES ===
+  refeicaoContainer: {
+    marginBottom: 16,
+    backgroundColor: '#F9FAFB',
+    border: '1px solid #E5E7EB',
+    borderRadius: 10,
+    padding: 12,
+  },
+  refeicaoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
+    paddingBottom: 8,
+    borderBottom: '2px solid #10b981',
+  },
+  refeicaoIcone: {
+    width: 6,
+    height: 6,
+    backgroundColor: '#10b981',
+    borderRadius: 3,
+  },
+  refeicaoNome: {
+    fontSize: 12,
+    fontWeight: 900,
+    color: '#111827',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  refeicaoHorario: {
+    fontSize: 9,
+    color: '#10b981',
+    fontWeight: 700,
+  },
+  alimentosList: {
+    gap: 6,
+  },
+  alimentoItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 6,
+  },
+  alimentoBullet: {
+    fontSize: 10,
+    color: '#10b981',
+    fontWeight: 900,
+    marginTop: 1,
+  },
+  alimentoTexto: {
+    fontSize: 10,
+    color: '#374151',
+    lineHeight: 1.5,
+    flex: 1,
   },
 
   // === DICAS ===
-  tipsBox: {
+  dicasContainer: {
     backgroundColor: '#ECFDF5',
     border: '2px solid #10b981',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 12,
     marginTop: 12,
+    marginBottom: 20,
   },
-  tipTitle: {
-    fontSize: 10,
-    fontWeight: 700,
+  dicasTitulo: {
+    fontSize: 11,
+    fontWeight: 900,
     color: '#047857',
-    marginBottom: 6,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
-  tipText: {
-    fontSize: 8,
+  dicaItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 6,
+    marginBottom: 4,
+  },
+  dicaBullet: {
+    fontSize: 10,
+    color: '#10b981',
+    fontWeight: 900,
+  },
+  dicaTexto: {
+    fontSize: 9,
     color: '#065F46',
-    lineHeight: 1.5,
+    lineHeight: 1.4,
+    flex: 1,
+  },
+
+  // === SEPARADOR DE DIA ===
+  diaSeparador: {
+    height: 1,
+    backgroundColor: '#E5E7EB',
+    marginVertical: 20,
   },
 
   // === FOOTER ===
@@ -284,6 +312,14 @@ export const DietPDF: React.FC<DietPDFProps> = ({
   const formatNivelAtividade = (nivel: string) =>
     nivel.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 
+  // Agrupar dias em páginas (3 dias por página)
+  const diasPorPagina = 3;
+  const paginas: DiaDieta[][] = [];
+  
+  for (let i = 0; i < dias.length; i += diasPorPagina) {
+    paginas.push(dias.slice(i, i + diasPorPagina));
+  }
+
   return (
     <Document>
       {/* === CAPA === */}
@@ -333,85 +369,90 @@ export const DietPDF: React.FC<DietPDFProps> = ({
         </View>
       </Page>
 
-      {/* === PÁGINAS DOS DIAS === */}
-      {dias.map((dia, index) => (
-        <Page key={dia.numero} size="A4" style={styles.page}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.headerLeft}>
-              <View style={styles.miniLogo}>
-                <Logo size={40} />
+      {/* === PÁGINAS COM DIAS (3 dias por página) === */}
+      {paginas.map((diasPagina, pageIndex) => (
+        <Page key={pageIndex} size="A4" style={styles.page}>
+          {diasPagina.map((dia, diaIndexNaPagina) => (
+            <View key={dia.numero}>
+              {/* Header do Dia */}
+              <View style={styles.diaHeader}>
+                <Text style={styles.diaTitulo}>{dia.nome}</Text>
+                <Text style={styles.diaNumero}>Dia {dia.numero}</Text>
               </View>
-              <View>
-                <Text style={styles.headerTitle}>{dia.nome}</Text>
-                <Text style={styles.headerDay}>Dia {dia.numero}</Text>
-              </View>
-            </View>
-          </View>
 
-          {/* Macros (se disponível) */}
-          {dia.macros && (
-            <View style={styles.macroRow}>
-              <View style={styles.macroCard}>
-                <Text style={styles.macroLabel}>Calorias</Text>
-                <Text style={styles.macroValue}>{dia.macros.calorias}</Text>
-                <Text style={styles.macroUnit}>kcal</Text>
-              </View>
-              <View style={styles.macroCard}>
-                <Text style={styles.macroLabel}>Proteínas</Text>
-                <Text style={styles.macroValue}>{dia.macros.proteinas}</Text>
-                <Text style={styles.macroUnit}>g</Text>
-              </View>
-              <View style={styles.macroCard}>
-                <Text style={styles.macroLabel}>Carboidratos</Text>
-                <Text style={styles.macroValue}>{dia.macros.carboidratos}</Text>
-                <Text style={styles.macroUnit}>g</Text>
-              </View>
-              <View style={styles.macroCard}>
-                <Text style={styles.macroLabel}>Gorduras</Text>
-                <Text style={styles.macroValue}>{dia.macros.gorduras}</Text>
-                <Text style={styles.macroUnit}>g</Text>
-              </View>
-            </View>
-          )}
+              {/* Macros */}
+              {dia.macros && (
+                <View style={styles.macroContainer}>
+                  <View style={styles.macroBox}>
+                    <Text style={styles.macroLabel}>Calorias</Text>
+                    <Text style={styles.macroValue}>{dia.macros.calorias}</Text>
+                    <Text style={styles.macroUnit}>kcal</Text>
+                  </View>
+                  <View style={styles.macroBox}>
+                    <Text style={styles.macroLabel}>Proteínas</Text>
+                    <Text style={styles.macroValue}>{dia.macros.proteinas}</Text>
+                    <Text style={styles.macroUnit}>g</Text>
+                  </View>
+                  <View style={styles.macroBox}>
+                    <Text style={styles.macroLabel}>Carboidratos</Text>
+                    <Text style={styles.macroValue}>{dia.macros.carboidratos}</Text>
+                    <Text style={styles.macroUnit}>g</Text>
+                  </View>
+                  <View style={styles.macroBox}>
+                    <Text style={styles.macroLabel}>Gorduras</Text>
+                    <Text style={styles.macroValue}>{dia.macros.gorduras}</Text>
+                    <Text style={styles.macroUnit}>g</Text>
+                  </View>
+                </View>
+              )}
 
-          {/* Refeições */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Refeições do Dia</Text>
-            <View style={styles.mealGrid}>
+              {/* Refeições */}
               {dia.refeicoes.map((refeicao, idx) => (
-                <View key={idx} style={styles.mealCard}>
-                  <Text style={styles.mealTime}>
-                    {refeicao.horario} • {refeicao.nome}
-                  </Text>
-                  {refeicao.alimentos.map((alimento, i) => (
-                    <Text key={i} style={styles.mealItem}>
-                      • {alimento}
-                    </Text>
-                  ))}
+                <View key={idx} style={styles.refeicaoContainer}>
+                  <View style={styles.refeicaoHeader}>
+                    <View style={styles.refeicaoIcone} />
+                    <Text style={styles.refeicaoNome}>{refeicao.nome}</Text>
+                    {refeicao.horario && (
+                      <Text style={styles.refeicaoHorario}>• {refeicao.horario}</Text>
+                    )}
+                  </View>
+                  <View style={styles.alimentosList}>
+                    {refeicao.alimentos.map((alimento, i) => (
+                      <View key={i} style={styles.alimentoItem}>
+                        <Text style={styles.alimentoBullet}>✓</Text>
+                        <Text style={styles.alimentoTexto}>{alimento}</Text>
+                      </View>
+                    ))}
+                  </View>
                 </View>
               ))}
-            </View>
-          </View>
 
-          {/* Dicas (se disponível) */}
-          {dia.dicas && dia.dicas.length > 0 && (
-            <View style={styles.tipsBox}>
-              <Text style={styles.tipTitle}>💡 Dicas do Dia</Text>
-              {dia.dicas.map((dica, i) => (
-                <Text key={i} style={styles.tipText}>
-                  • {dica}
-                </Text>
-              ))}
+              {/* Dicas */}
+              {dia.dicas && dia.dicas.length > 0 && (
+                <View style={styles.dicasContainer}>
+                  <Text style={styles.dicasTitulo}>💡 Dicas do Dia</Text>
+                  {dia.dicas.map((dica, i) => (
+                    <View key={i} style={styles.dicaItem}>
+                      <Text style={styles.dicaBullet}>•</Text>
+                      <Text style={styles.dicaTexto}>{dica}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {/* Separador entre dias (exceto o último da página) */}
+              {diaIndexNaPagina < diasPagina.length - 1 && (
+                <View style={styles.diaSeparador} />
+              )}
             </View>
-          )}
+          ))}
 
           {/* Footer */}
           <View style={styles.footer}>
             <Text style={styles.footerText}>
               Plano exclusivo para {nome} • Objetivo: {formatObjetivo(objetivo)}
             </Text>
-            <Text style={styles.pageNumber}>Página {index + 2}</Text>
+            <Text style={styles.pageNumber}>Página {pageIndex + 2}</Text>
           </View>
         </Page>
       ))}
