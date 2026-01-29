@@ -24,7 +24,7 @@ import {
 import { useRef, useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 
-// Tipo para planos salvos
+
 interface SavedPlan {
   id: string;
   data: DietData;
@@ -43,7 +43,7 @@ export function DietGenerator({ data }: { data: DietData }) {
   const controllerRef = useRef<AbortController | null>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
-  // Carregar planos salvos do localStorage
+  
   useEffect(() => {
     const stored = localStorage.getItem('diet-plans')
     if (stored) {
@@ -55,7 +55,7 @@ export function DietGenerator({ data }: { data: DietData }) {
     }
   }, [])
 
-  // Salvar plano no localStorage
+  
   const savePlan = (planOutput: string) => {
     const newPlan: SavedPlan = {
       id: Date.now().toString(),
@@ -65,18 +65,18 @@ export function DietGenerator({ data }: { data: DietData }) {
       objetivo: data.objetivo
     }
 
-    const updated = [newPlan, ...savedPlans].slice(0, 10) // Mantém apenas os 10 últimos
+    const updated = [newPlan, ...savedPlans].slice(0, 10) 
     setSavedPlans(updated)
     localStorage.setItem('diet-plans', JSON.stringify(updated))
   }
 
-  // Carregar plano anterior
+  
   const loadPlan = (plan: SavedPlan) => {
     setOutput(plan.output)
     setShowHistory(false)
   }
 
-  // Deletar plano
+  
   const deletePlan = (id: string) => {
     const updated = savedPlans.filter(p => p.id !== id)
     setSavedPlans(updated)
@@ -128,7 +128,7 @@ export function DietGenerator({ data }: { data: DietData }) {
         setOutput(fullOutput)
       }
 
-      // Salva o plano completo
+      
       if (fullOutput) {
         savePlan(fullOutput)
       }
@@ -183,7 +183,7 @@ export function DietGenerator({ data }: { data: DietData }) {
     }
   };
 
-  // Loading Skeleton Component
+  
   const LoadingSkeleton = () => (
     <div className="p-6 md:p-10 space-y-6 animate-pulse">
       {/* Título skeleton */}
@@ -209,7 +209,7 @@ export function DietGenerator({ data }: { data: DietData }) {
     </div>
   );
 
-  // Formatar data
+  
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp)
     return date.toLocaleDateString('pt-BR', { 

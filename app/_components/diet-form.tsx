@@ -62,10 +62,10 @@ export function DietForm({ onSubmit }: DietFormProps) {
             nivel_atividade: undefined,
             objetivo: undefined,
         },
-        mode: "onChange" // Validação em tempo real
+        mode: "onChange" 
     });
 
-    // Verificar se há rascunho salvo ao carregar
+    
     useEffect(() => {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -79,15 +79,15 @@ export function DietForm({ onSubmit }: DietFormProps) {
         }
     }, []);
 
-    // Auto-save enquanto pessoa preenche (debounced)
+    
     useEffect(() => {
         const subscription = form.watch((value) => {
-            // Só salva se tiver pelo menos um campo preenchido
+            
             const hasData = Object.values(value).some(v => v !== undefined && v !== "");
             if (hasData) {
                 const timer = setTimeout(() => {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-                }, 1000); // Debounce de 1 segundo
+                }, 1000); 
 
                 return () => clearTimeout(timer);
             }
@@ -96,26 +96,26 @@ export function DietForm({ onSubmit }: DietFormProps) {
         return () => subscription.unsubscribe();
     }, [form.watch]);
 
-    // Atualizar campos completados em tempo real
+    
     useEffect(() => {
         const subscription = form.watch((value, { name }) => {
-            // Atualiza todos os campos, não só o que mudou
+            
             const newCompletedFields = new Set<string>();
 
             Object.keys(value).forEach((fieldName) => {
                 const fieldValue = value[fieldName as keyof DietSchemaFormData];
 
                 try {
-                    // Valida o campo individualmente
+                    
                     const fieldSchema = dietSchema.shape[fieldName as keyof typeof dietSchema.shape];
                     fieldSchema.parse(fieldValue);
 
-                    // Se passou na validação, marca como completo
+                    
                     if (fieldValue !== undefined && fieldValue !== "") {
                         newCompletedFields.add(fieldName);
                     }
                 } catch (e) {
-                    // Se deu erro na validação, não marca como completo
+                    
                 }
             });
 
@@ -139,16 +139,16 @@ export function DietForm({ onSubmit }: DietFormProps) {
     };
 
     const handleFormSubmit = (data: DietSchemaFormData) => {
-        // Limpar rascunho ao submeter
+        
         localStorage.removeItem(STORAGE_KEY);
         onSubmit(data);
     };
 
-    // Calcular progresso
+    
     const totalFields = 7;
     const progress = (completedFields.size / totalFields) * 100;
 
-    // Campo válido helper
+    
     const isFieldValid = (fieldName: string) => {
         return completedFields.has(fieldName);
     };
@@ -252,7 +252,7 @@ export function DietForm({ onSubmit }: DietFormProps) {
                                     className="inline-flex items-center gap-2 bg-emerald-500/20 backdrop-blur-md px-3 py-1.5 rounded-full mb-6 sm:mb-8 border border-emerald-500/30"
                                 >
                                     <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-emerald-400" />
-                                    <span className="text-[9px] sm:text-[10px] uppercase tracking-widest font-bold text-emerald-400">Saúde Inteligente</span>
+                                    <span className="text-[9px] sm:text-[10px] uppercase tracking-widest font-bold text-emerald-400">Dietron AI</span>
                                 </motion.div>
 
                                 <h1 className="text-2xl lg:text-3xl font-extrabold leading-tight mb-4 sm:mb-5">
