@@ -414,7 +414,7 @@ export function DietGenerator({ data }: { data: DietData }) {
             )}
 
             {/* Loading Skeleton */}
-            {isStreaming && (
+            {isStreaming && !output && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -439,7 +439,7 @@ export function DietGenerator({ data }: { data: DietData }) {
               </motion.div>
             )}
 
-            {/* Conteúdo Gerado */}
+            {/* Conteúdo Gerado - Aparece quando já tem output OU está streaming com output */}
             {output && (
               <motion.div
                 initial={{ opacity: 0 }}
