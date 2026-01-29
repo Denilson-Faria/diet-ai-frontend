@@ -279,26 +279,6 @@ export function DietGenerator({ data }: { data: DietData }) {
           </Card>
         </motion.div>
 
-        {/* Botão de Histórico */}
-        {savedPlans.length > 0 && !output && !isStreaming && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Button
-              onClick={() => setShowHistory(!showHistory)}
-              variant="outline"
-              className="w-full md:w-auto rounded-xl border-gray-200 hover:border-[#10b981] hover:text-[#059669] transition-all gap-2 h-11 px-5"
-            >
-              <History className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase tracking-wider">
-                Meus Planos Anteriores ({savedPlans.length})
-              </span>
-            </Button>
-          </motion.div>
-        )}
-
         {/* Modal de Histórico */}
         <AnimatePresence>
           {showHistory && (
@@ -354,10 +334,9 @@ export function DietGenerator({ data }: { data: DietData }) {
                           variant="ghost"
                           size="icon"
                           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    deletePlan(plan.id);
-}}
-
+                            e.stopPropagation();
+                            deletePlan(plan.id);
+                          }}
                           className="rounded-lg hover:bg-red-50 hover:text-red-600 flex-shrink-0"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -406,15 +385,31 @@ export function DietGenerator({ data }: { data: DietData }) {
                 <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-3 md:mb-4">
                   Seu plano está pronto
                 </h3>
-                <Button
-                  onClick={handleGenerate}
-                  className="h-14 md:h-16 px-8 md:px-10 text-base md:text-lg font-extrabold bg-[#111827] hover:bg-black text-white rounded-2xl md:rounded-[20px] flex items-center gap-3 transition-all hover:scale-105"
-                >
-                  <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-[#34d399]" />
-                  <span className="hidden sm:inline">Gerar Minha Dieta Premium</span>
-                  <span className="sm:hidden">Gerar Dieta</span>
-                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
-                </Button>
+                
+                {/* Botões de ação */}
+                <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+                  <Button
+                    onClick={handleGenerate}
+                    className="flex-1 h-14 md:h-16 px-8 md:px-10 text-base md:text-lg font-extrabold bg-[#111827] hover:bg-black text-white rounded-2xl md:rounded-[20px] flex items-center justify-center gap-3 transition-all hover:scale-105"
+                  >
+                    <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-[#34d399]" />
+                    <span className="hidden sm:inline">Gerar Minha Dieta Premium</span>
+                    <span className="sm:hidden">Gerar Dieta</span>
+                    <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+                  </Button>
+                  
+                  {savedPlans.length > 0 && (
+                    <Button
+                      onClick={() => setShowHistory(true)}
+                      variant="outline"
+                      className="h-14 md:h-16 px-6 rounded-2xl md:rounded-[20px] border-2 border-gray-200 hover:border-[#10b981] hover:text-[#059669] transition-all gap-2 font-bold"
+                    >
+                      <History className="w-4 h-4 md:w-5 md:h-5" />
+                      <span className="hidden sm:inline">Histórico ({savedPlans.length})</span>
+                      <span className="sm:hidden">{savedPlans.length}</span>
+                    </Button>
+                  )}
+                </div>
               </motion.div>
             )}
 
@@ -666,7 +661,7 @@ export function DietGenerator({ data }: { data: DietData }) {
                       variant="ghost"
                       className="h-10 md:h-12 px-4 md:px-6 rounded-xl hover:bg-[#ecfdf5] text-[#047857] font-bold gap-2 group transition-all w-full md:w-auto"
                     >
-                      <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform" />
+                      <RefreshCw className="w-4 group-hover:rotate-180 transition-transform" />
                       <span className="text-xs md:text-sm">Recalcular Plano</span>
                     </Button>
                   </motion.div>
