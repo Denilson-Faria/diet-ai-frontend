@@ -90,8 +90,10 @@ export function DietGenerator({ data }: { data: DietData }) {
     setOutput("")
     setIsStreaming(true);
 
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://diet-ai-backend-fi4y.onrender.com";
+
     try {
-      const response = await fetch("http://localhost:3333/plan", {
+      const response = await fetch("https://diet-ai-backend-fi4y.onrender.com/plan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
