@@ -47,8 +47,9 @@ Criar uma interface intuitiva e performática que permita ao usuário:
 ## 📸 Screenshots
 
 ### 📋 Formulário de Dados
-![Form](<img width="1898" height="909" alt="{420543D6-1AC0-4F9F-AAC7-D807111D5D60}" src="https://github.com/user-attachments/assets/95793526-86c4-461d-a643-7173b6ecad64" />)
+![Form](https://github.com/user-attachments/assets/95793526-86c4-461d-a643-7173b6ecad64)
 
 ### 📊 Resultado da Dieta Gerada
-![Result](<img width="1905" height="910" alt="{6C135B44-6382-4CDD-AF75-0EB9026CB580}" src="https://github.com/user-attachments/assets/40a9296c-a2a1-48ee-aa76-d9c0058dc304" />)
+![Result](https://github.com/user-attachments/assets/40a9296c-a2a1-48ee-aa76-d9c0058dc304)
+
 
