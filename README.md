@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🥗 Diet AI Frontend
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![License](https://img.shields.io/github/license/Denilson-Faria/diet-ai-frontend?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow?style=for-the-badge)
 
-First, run the development server:
+Frontend moderno e responsivo para geração de **dietas personalizadas com Inteligência Artificial**, desenvolvido com **Next.js e TypeScript**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Este projeto faz parte do meu **portfólio** e demonstra habilidades em frontend moderno, consumo de APIs, arquitetura de aplicações React e foco em experiência do usuário.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎯 Objetivo do Projeto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Criar uma interface intuitiva e performática que permita ao usuário:
 
-## Learn More
+- Inserir dados pessoais e objetivos nutricionais
+- Enviar essas informações para uma API de IA
+- Receber um plano alimentar personalizado
+- Visualizar os resultados de forma clara e organizada
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Funcionalidades
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 📋 Formulário de entrada de dados do usuário
+- 🤖 Integração com backend de IA para geração de dietas
+- 📊 Exibição do plano alimentar gerado
+- 📱 Design responsivo (mobile e desktop)
+- ⚡ Renderização otimizada com Next.js
+- 🧩 Componentes reutilizáveis
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧠 Tecnologias Utilizadas
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js** – Framework React para aplicações modernas
+- **React** – Criação de interfaces reativas
+- **TypeScript** – Tipagem estática e maior segurança
+- **Tailwind CSS** (se aplicável) – Estilização rápida e consistente
+- **ESLint & Prettier** – Padronização e qualidade de código
+
+---
+
+## 📸 Screenshots
+
+### 📋 Formulário de Dados
+![Form](<img width="1898" height="909" alt="{420543D6-1AC0-4F9F-AAC7-D807111D5D60}" src="https://github.com/user-attachments/assets/95793526-86c4-461d-a643-7173b6ecad64" />)
+
+### 📊 Resultado da Dieta Gerada
+![Result](<img width="1905" height="910" alt="{6C135B44-6382-4CDD-AF75-0EB9026CB580}" src="https://github.com/user-attachments/assets/40a9296c-a2a1-48ee-aa76-d9c0058dc304" />)
+
