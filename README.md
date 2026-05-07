@@ -3,44 +3,62 @@
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![License](https://img.shields.io/github/license/Denilson-Faria/diet-ai-frontend?style=for-the-badge)
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow?style=for-the-badge)
 
-Frontend moderno e responsivo para geração de **dietas personalizadas com Inteligência Artificial**, desenvolvido com **Next.js e TypeScript**.
+Frontend moderno para geração de dietas personalizadas utilizando Inteligência Artificial, desenvolvido com Next.js e TypeScript.
 
-Este projeto faz parte do meu **portfólio** e demonstra habilidades em frontend moderno, consumo de APIs, arquitetura de aplicações React e foco em experiência do usuário.
+O projeto simula um fluxo real de aplicação SaaS, consumindo APIs para processamento de dados nutricionais e geração automatizada de planos alimentares.
+
+---
+
+# 🔗 Links
+
+- 🌐 Deploy: https://dietron.netlify.app/
+- 💻 Frontend: https://github.com/Denilson-Faria/diet-ai-frontend
+- ⚙️ Backend: https://github.com/Denilson-Faria/diet-ai-backend
 
 ---
 
 ## 🎯 Objetivo do Projeto
 
-Criar uma interface intuitiva e performática que permita ao usuário:
+Desenvolver uma aplicação Full Stack capaz de:
 
-- Inserir dados pessoais e objetivos nutricionais
-- Enviar essas informações para uma API de IA
-- Receber um plano alimentar personalizado
-- Visualizar os resultados de forma clara e organizada
+- Coletar informações nutricionais do usuário
+- Processar dados através de integração com IA
+- Gerar dietas personalizadas dinamicamente
+- Exibir resultados de forma clara e responsiva
 
 ---
 
 ## 🚀 Funcionalidades
 
-- 📋 Formulário de entrada de dados do usuário
-- 🤖 Integração com backend de IA para geração de dietas
-- 📊 Exibição do plano alimentar gerado
-- 📱 Design responsivo (mobile e desktop)
-- ⚡ Renderização otimizada com Next.js
-- 🧩 Componentes reutilizáveis
+- 📋 Formulário completo de coleta de dados
+- 🤖 Integração com API de IA
+- 🔄 Comunicação entre frontend e backend via REST API
+- 📊 Renderização dinâmica do plano alimentar
+- 📱 Interface responsiva para mobile e desktop
+- ⚡ Otimização de renderização com Next.js
+- 🧩 Componentização reutilizável
 
 ---
 
 ## 🧠 Tecnologias Utilizadas
 
-- **Next.js** – Framework React para aplicações modernas
-- **React** – Criação de interfaces reativas
-- **TypeScript** – Tipagem estática e maior segurança
-- **Tailwind CSS** (se aplicável) – Estilização rápida e consistente
-- **ESLint & Prettier** – Padronização e qualidade de código
+### Frontend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Context API
+
+### Backend
+- Node.js
+- Fastify
+- OpenAI API
+
+### Ferramentas
+- Git
+- GitHub
+- Vercel
 
 ---
 
@@ -51,5 +69,3 @@ Criar uma interface intuitiva e performática que permita ao usuário:
 
 ### 📊 Resultado da Dieta Gerada
 ![Result](https://github.com/user-attachments/assets/40a9296c-a2a1-48ee-aa76-d9c0058dc304)
-
-
